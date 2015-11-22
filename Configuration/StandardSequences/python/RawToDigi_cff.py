@@ -46,7 +46,7 @@ import EventFilter.RPCRawToDigi.rpcUnpacker_cfi
 muonRPCDigis = EventFilter.RPCRawToDigi.rpcUnpacker_cfi.rpcunpacker.clone()
 
 from EventFilter.CastorRawToDigi.CastorRawToDigi_cff import *
-castorDigis = EventFilter.CastorRawToDigi.CastorRawToDigi_cfi.castorDigis.clone( FEDs = cms.untracked.vint32(690,691,692) )
+castorDigis = EventFilter.CastorRawToDigi.CastorRawToDigi_cfi.castorDigis.clone( FEDs = cms.untracked.vint32(690,691,692, 693,722) )
 
 from EventFilter.ScalersRawToDigi.ScalersRawToDigi_cfi import *
 
@@ -63,10 +63,10 @@ RawToDigi = cms.Sequence(csctfDigis
                          +ecalDigis
                          +ecalPreshowerDigis
                          +hcalDigis
+                         +castorDigis
                          +muonCSCDigis
                          +muonDTDigis
                          +muonRPCDigis
-                         +castorDigis
                          +scalersRawToDigi
                          +tcdsDigis)
 
@@ -78,10 +78,10 @@ RawToDigi_noTk = cms.Sequence(csctfDigis
                               +ecalDigis
                               +ecalPreshowerDigis
                               +hcalDigis
+                              +castorDigis
                               +muonCSCDigis
                               +muonDTDigis
                               +muonRPCDigis
-                              +castorDigis
                               +scalersRawToDigi
                               +tcdsDigis)
     
@@ -104,9 +104,6 @@ castorDigis.InputLabel = 'rawDataCollector'
 ##
 ## Make changes for Run 2
 ##
-def _modifyRawToDigiForRun2( RawToDigi_object ) :
-    RawToDigi_object.remove(gtEvmDigis)
-
 def _modifyRawToDigiForStage1Trigger( theProcess ) :
     """
     Modifies the RawToDigi sequence if using the Stage 1 L1 trigger
@@ -121,6 +118,5 @@ def _modifyRawToDigiForStage1Trigger( theProcess ) :
     L1RawToDigiSeq = cms.Sequence( gctDigis + theProcess.caloStage1Digis + theProcess.caloStage1LegacyFormatDigis)
     RawToDigi.replace( gctDigis, L1RawToDigiSeq )
 
-eras.run2_common.toModify( RawToDigi, func=_modifyRawToDigiForRun2 )
 # A unique name is required for this object, so I'll call it "modify<python filename>ForRun2_"
 modifyConfigurationStandardSequencesRawToDigiForRun2_ = eras.stage1L1Trigger.makeProcessModifier( _modifyRawToDigiForStage1Trigger )
