@@ -21,6 +21,7 @@ HcalRawToDigi::HcalRawToDigi(edm::ParameterSet const& conf):
   firstFED_(conf.getUntrackedParameter<int>("HcalFirstFED",FEDNumbering::MINHCALFEDID)),
   unpackCalib_(conf.getUntrackedParameter<bool>("UnpackCalib",false)),
   unpackZDC_(conf.getUntrackedParameter<bool>("UnpackZDC",false)),
+  unpackRPD_(conf.getUntrackedParameter<bool>("UnpackRPD",false)),
   unpackTTP_(conf.getUntrackedParameter<bool>("UnpackTTP",false)),
   silent_(conf.getUntrackedParameter<bool>("silent",true)),
   complainEmptyData_(conf.getUntrackedParameter<bool>("ComplainEmptyData",false)),
@@ -56,7 +57,7 @@ HcalRawToDigi::HcalRawToDigi(edm::ParameterSet const& conf):
   produces<HcalUnpackerReport>();
   if (unpackCalib_)
     produces<HcalCalibDigiCollection>();
-  if (unpackZDC_)
+  if (unpackZDC_ || unpackRPD_)
     produces<ZDCDigiCollection>();
   if (unpackTTP_)
     produces<HcalTTPDigiCollection>();
@@ -78,6 +79,7 @@ void HcalRawToDigi::fillDescriptions(edm::ConfigurationDescriptions& description
   desc.add<bool>("FilterDataQuality",true);
   desc.addUntracked<std::vector<int>>("FEDs", std::vector<int>());
   desc.addUntracked<bool>("UnpackZDC",true);
+  desc.addUntracked<bool>("UnpackRPD",true);
   desc.addUntracked<bool>("UnpackCalib",true);
   desc.addUntracked<bool>("UnpackTTP",true);
   desc.addUntracked<bool>("silent",true);
@@ -110,6 +112,7 @@ void HcalRawToDigi::produce(edm::Event& e, const edm::EventSetup& es)
   std::vector<HcalTriggerPrimitiveDigi> htp;
   std::vector<HcalCalibDataFrame> hc;
   std::vector<ZDCDataFrame> zdc;
+  std::vector<ZDCDataFrame> rpd;
   std::vector<HcalTTPDigi> ttp;
   std::vector<HOTriggerPrimitiveDigi> hotp;
   std::auto_ptr<HcalUnpackerReport> report(new HcalUnpackerReport);
@@ -123,6 +126,7 @@ void HcalRawToDigi::produce(edm::Event& e, const edm::EventSetup& es)
   if (stats_.max_tpho>0) hotp.reserve(stats_.ave_tpho+(stats_.max_tpho-stats_.ave_tpho)/8);
 
   if (unpackZDC_) zdc.reserve(24);
+  if (unpackRPD_) rpd.reserve(32);
 
 
   HcalUnpacker::Collections colls;
@@ -133,6 +137,7 @@ void HcalRawToDigi::produce(edm::Event& e, const edm::EventSetup& es)
   colls.tphoCont=&hotp;
   colls.calibCont=&hc;
   colls.zdcCont=&zdc;
+  colls.rpdCont=&rpd;
   if (unpackTTP_) colls.ttp=&ttp;
  
   // Step C: unpack all requested FEDs
@@ -195,7 +200,11 @@ void HcalRawToDigi::produce(edm::Event& e, const edm::EventSetup& es)
   if (colls.qie10 == 0) {
     colls.qie10 = new QIE10DigiCollection(); 
   }
+  if (colls.qie10RPD == 0) {
+    colls.qie10RPD = new QIE10DigiCollection(); 
+  }
   std::auto_ptr<QIE10DigiCollection> qie10_prod(colls.qie10);
+  std::auto_ptr<QIE10DigiCollection> qie10RPD_prod(colls.qie10RPD);
   if (colls.qie11 == 0) {
     colls.qie11 = new QIE11DigiCollection(); 
   }
@@ -227,6 +236,7 @@ void HcalRawToDigi::produce(edm::Event& e, const edm::EventSetup& es)
   htp_prod->sort();
   hotp_prod->sort();
   qie10_prod->sort();
+  qie10RPD_prod->sort();
   qie11_prod->sort();
 
   e.put(hbhe_prod);
@@ -235,6 +245,7 @@ void HcalRawToDigi::produce(edm::Event& e, const edm::EventSetup& es)
   e.put(htp_prod);
   e.put(hotp_prod);
   e.put(qie10_prod);
+  e.put(qie10RPD_prod);
   e.put(qie11_prod);
 
   /// calib
@@ -263,6 +274,19 @@ void HcalRawToDigi::produce(edm::Event& e, const edm::EventSetup& es)
 
     prod->sort();
     e.put(prod);
+  }
+  
+  if (unpackRPD_) {
+    std::auto_ptr<ZDCDigiCollection> qie10RPD_prod(new ZDCDigiCollection());
+    qie10RPD_prod->swap_contents(rpd);
+    
+    if (filter_.active()) {
+      ZDCDigiCollection filtered_rpd=filter_.filter(*qie10RPD_prod,*report);
+      qie10RPD_prod->swap(filtered_rpd);
+    }
+
+    qie10RPD_prod->sort();
+    e.put(qie10RPD_prod);
   }
 
   if (unpackTTP_) {

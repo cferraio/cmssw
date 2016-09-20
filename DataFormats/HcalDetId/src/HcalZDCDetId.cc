@@ -35,7 +35,7 @@ HcalZDCDetId::denseIndex() const
    const int se ( section() ) ;
    return ( ( zside()<0 ? 0 : kDepTot ) + channel() - 1 +
 	    ( se == HAD  ? kDepEM :
-	      ( se == LUM ? kDepEM + kDepHAD : 0 ) ) ) ;
+	      ( se == RPD ? kDepEM + kDepHAD : 0 ) ) ) ;
 }
 
 HcalZDCDetId 
@@ -46,7 +46,7 @@ HcalZDCDetId::detIdFromDenseIndex( uint32_t di )
       const bool lz ( di >= kDepTot ) ;
       const uint32_t in ( di%kDepTot ) ;
       const Section se ( in<kDepEM ? EM :
-			 ( in<kDepEM+kDepHAD ? HAD : LUM ) ) ;
+			 ( in<kDepEM+kDepHAD ? HAD : RPD ) ) ;
       const uint32_t dp ( EM == se ? in+1 :
 			  ( HAD == se ? in - kDepEM + 1 : in - kDepEM - kDepHAD + 1 ) ) ;
       return HcalZDCDetId( se, lz, dp ) ;
@@ -66,8 +66,8 @@ HcalZDCDetId::validDetId( Section se ,
 			 ( dp <= kDepEM  )    ) ||
 		       ( ( se == HAD     ) &&
 			 ( dp <= kDepHAD )    ) ||
-		       ( ( se == LUM     ) &&
-			 ( dp <= kDepLUM )    )   
+		       ( ( se == RPD     ) &&
+			 ( dp <= kDepRPD )    )   
 		       )
 	   ) ;
 }
@@ -77,7 +77,7 @@ std::ostream& operator<<(std::ostream& s,const HcalZDCDetId& id) {
   switch (id.section()) {
   case(HcalZDCDetId::EM) : s << " EM "; break;
   case(HcalZDCDetId::HAD) : s << " HAD "; break;
-  case(HcalZDCDetId::LUM) : s << " LUM "; break;
+  case(HcalZDCDetId::RPD) : s << " RPD "; break;
   default : s <<" UNKNOWN ";
   }
   return s << id.channel() << "," << id.depth() << ')';

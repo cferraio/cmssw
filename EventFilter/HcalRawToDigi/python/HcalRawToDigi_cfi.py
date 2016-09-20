@@ -5,6 +5,8 @@ import EventFilter.HcalRawToDigi.hcalRawToDigi_cfi
 hcalDigis =  EventFilter.HcalRawToDigi.hcalRawToDigi_cfi.hcalRawToDigi.clone()
 # Flag to enable unpacking of ZDC channels (default = false)
 hcalDigis.UnpackZDC = cms.untracked.bool(True)
+# Flag to enable unpacking of ZDC channels (default = false)
+hcalDigis.UnpackRPD = cms.untracked.bool(True)
 # Flag to enable unpacking of TTP channels (default = false)
 hcalDigis.UnpackTTP = cms.untracked.bool(True)
 # Optional filter to remove any digi with "data valid" off, "error" on, 

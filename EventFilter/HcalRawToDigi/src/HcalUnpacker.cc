@@ -673,11 +673,21 @@ void HcalUnpacker::unpackUTCA(const FEDRawData& raw, const HcalElectronicsMap& e
 	  edm::LogError("Invalid Data") << "Collection has " << colls.qie10->samples() << " samples per digi, raw data has " << ns << "!";
 	  return;
 	}
+	
+	if (colls.qie10RPD == 0) {
+	  colls.qie10RPD = new QIE10DigiCollection(ns);
+	}
+	else if (colls.qie10RPD->samples() != ns) {
+	  // This is horrible
+	  edm::LogError("Invalid Data") << "Collection has " << colls.qie10RPD->samples() << " samples per digi, raw data has " << ns << "!";
+	  return;
+	}
 
 	// Insert data
     /////////////////////////////////////////////CODE FROM OLD STYLE DIGIS///////////////////////////////////////////////////////////////
 	if (!did.null()) { // unpack and store...
 		colls.qie10->addDataFrame(did, head_pos);
+		colls.qie10RPD->addDataFrame(did, head_pos);
 	} else {
 		report.countUnmappedDigi(eid);
 		if (unknownIds_.find(eid)==unknownIds_.end()) {
@@ -692,6 +702,12 @@ void HcalUnpacker::unpackUTCA(const FEDRawData& raw, const HcalElectronicsMap& e
 #endif
 	}
       }
+      
+      
+///////////////////////////////////////////////////////////////      
+///////////////////////////////////////////////////////////////      
+///////////////////////////////////////////////////////////////
+      
       else if (i.flavor()==0x5) { // Old-style digis
 	int ifiber=((i.channelid()>>2)&0x1F);
 	int ichan=(i.channelid()&0x3);
@@ -795,6 +811,7 @@ HcalUnpacker::Collections::Collections() {
   calibCont=0;
   ttp=0;
   qie10=0;
+  qie10RPD=0;
   qie11=0;
 }
 
