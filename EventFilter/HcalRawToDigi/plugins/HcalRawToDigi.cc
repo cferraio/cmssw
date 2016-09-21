@@ -130,6 +130,7 @@ void HcalRawToDigi::produce(edm::Event& e, const edm::EventSetup& es)
   if (stats_.max_tpho>0) hotp.reserve(stats_.ave_tpho+(stats_.max_tpho-stats_.ave_tpho)/8);
 
   if (unpackZDC_) zdc.reserve(24);
+  if (unpackRPD_) zdc.reserve(32);
 
 
   HcalUnpacker::Collections colls;
