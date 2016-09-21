@@ -8,14 +8,14 @@
   *  
   *  Contents of the HcalZDCDetId :
   *     [6]   Z position (true for positive)
-  *     [5:4] Section (EM/HAD/Lumi)
+  *     [5:4] Section (EM/HAD/RPD)
   *     [3:0] Channel
   *
   * \author J. Mans - Minnesota
   */
 class HcalZDCDetId : public DetId {
 public:
-  enum Section { Unknown=0, EM=1, HAD=2, LUM=3 };
+  enum Section { Unknown=0, EM=1, HAD=2, RPD=3 };
   // 1 => CaloTower, 3 => Castor
   static const int SubdetectorId = 2;
 
@@ -34,8 +34,8 @@ public:
   int zside() const { return (id_&0x40)?(1):(-1); }
   /// get the section
   Section section() const { return (Section)((id_>>4)&0x3); }
-  /// get the depth (1 for EM, channel + 1 for HAD, not sure yet for LUM, leave as default)
-  int depth() const { return (((id_>>4)&0x3)==1)?(1):((((id_>>4)&0x3)==2)?((id_&0xF)+1):(id_&0xF)); }
+  /// get the depth (1 for EM, 2 for RPD, channel + 2 for HAD)
+  int depth() const { return (((id_>>4)&0x3)==1)?(1):((((id_>>4)&0x3)==2)?((id_&0xF)+2):(((id_>>4)&0x3)==3)?(2):(id_&0xF)); }
   /// get the channel 
   int channel() const { return id_&0xF; }
 
@@ -51,8 +51,8 @@ public:
 
       enum { kDepEM  = 5,
 	     kDepHAD = 4,
-	     kDepLUM = 2,
-	     kDepTot = kDepEM + kDepHAD + kDepLUM };
+	     kDepRPD = 16,
+	     kDepTot = kDepEM + kDepHAD + kDepRPD };
 
    public:
 

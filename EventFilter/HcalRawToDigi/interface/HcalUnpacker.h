@@ -26,12 +26,14 @@ public:
     std::vector<HBHEDataFrame>* hbheCont;
     std::vector<HODataFrame>* hoCont;
     std::vector<HFDataFrame>* hfCont;
+    std::vector<HFDataFrame>* rpdCont;
     std::vector<HcalCalibDataFrame>* calibCont;
     std::vector<ZDCDataFrame>* zdcCont;
     std::vector<HcalTriggerPrimitiveDigi>* tpCont;
     std::vector<HOTriggerPrimitiveDigi>* tphoCont;
     std::vector<HcalTTPDigi>* ttp;
     QIE10DigiCollection* qie10;
+    QIE10DigiCollection* qie10RPD;
     QIE11DigiCollection* qie11;
     HcalUMNioDigi* umnio;
 

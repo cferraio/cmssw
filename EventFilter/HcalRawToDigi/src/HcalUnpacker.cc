@@ -654,6 +654,10 @@ void HcalUnpacker::unpackUTCA(const FEDRawData& raw, const HcalElectronicsMap& e
 	int ichan=(i.channelid()&0x7);
 	HcalElectronicsId eid(crate,slot,ifiber,ichan, false);
 	DetId did=emap.lookup(eid);
+	int RPDcheck=(did>>24);
+	int RPDdetIDs = 0x54; 
+	bool isRPD = false;
+	if (RPDcheck == RPDdetIDs) isRPD = true;
 
 	// Count from current position to next header, or equal to end
 	const uint16_t* head_pos = i.raw();
@@ -663,6 +667,15 @@ void HcalUnpacker::unpackUTCA(const FEDRawData& raw, const HcalElectronicsMap& e
 	}
 
 	// Check QEI10 container exists
+	if (colls.qie10RPD == 0) {
+	  colls.qie10RPD = new QIE10DigiCollection(ns);
+	}
+	else if (colls.qie10RPD->samples() != ns) {
+	  // This is horrible
+	  edm::LogError("Invalid Data") << "Collection has " << colls.qie10RPD->samples() << " samples per digi, raw data has " << ns << "!";
+	  return;
+	}
+	
 	if (colls.qie10 == 0) {
 	  colls.qie10 = new QIE10DigiCollection(ns);
 	}
@@ -674,8 +687,10 @@ void HcalUnpacker::unpackUTCA(const FEDRawData& raw, const HcalElectronicsMap& e
 
 	// Insert data
     /////////////////////////////////////////////CODE FROM OLD STYLE DIGIS///////////////////////////////////////////////////////////////
-	if (!did.null()) { // unpack and store...
+	if (!did.null() && !isRPD) { // unpack and store...
 		colls.qie10->addDataFrame(did, head_pos);
+	} else if (!did.null() && isRPD) { // unpack and store...
+		colls.qie10RPD->addDataFrame(did, head_pos);
 	} else {
 		report.countUnmappedDigi(eid);
 		if (unknownIds_.find(eid)==unknownIds_.end()) {
@@ -793,6 +808,7 @@ HcalUnpacker::Collections::Collections() {
   calibCont=0;
   ttp=0;
   qie10=0;
+  qie10RPD=0;
   qie11=0;
   umnio=0;
 }
