@@ -654,10 +654,6 @@ void HcalUnpacker::unpackUTCA(const FEDRawData& raw, const HcalElectronicsMap& e
 	int ichan=(i.channelid()&0x7);
 	HcalElectronicsId eid(crate,slot,ifiber,ichan, false);
 	DetId did=emap.lookup(eid);
-	int RPDcheck=(did>>24);
-	int RPDdetIDs = 0x54; 
-	bool isRPD = false;
-	if (RPDcheck == RPDdetIDs) isRPD = true;
 
 	// Count from current position to next header, or equal to end
 	const uint16_t* head_pos = i.raw();
@@ -687,10 +683,10 @@ void HcalUnpacker::unpackUTCA(const FEDRawData& raw, const HcalElectronicsMap& e
 
 	// Insert data
     /////////////////////////////////////////////CODE FROM OLD STYLE DIGIS///////////////////////////////////////////////////////////////
-	if (!did.null() && !isRPD) { // unpack and store...
-		colls.qie10->addDataFrame(did, head_pos);
-	} else if (!did.null() && isRPD) { // unpack and store...
+	if (!did.null() && did.det()==DetId::Calo && did.subdetId()==HcalZDCDetId::SubdetectorId) { // unpack and store...
 		colls.qie10RPD->addDataFrame(did, head_pos);
+	} else if (!did.null()) { // unpack and store...
+		colls.qie10->addDataFrame(did, head_pos);
 	} else {
 		report.countUnmappedDigi(eid);
 		if (unknownIds_.find(eid)==unknownIds_.end()) {

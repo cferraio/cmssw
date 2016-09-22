@@ -26,7 +26,6 @@ public:
     std::vector<HBHEDataFrame>* hbheCont;
     std::vector<HODataFrame>* hoCont;
     std::vector<HFDataFrame>* hfCont;
-    std::vector<HFDataFrame>* rpdCont;
     std::vector<HcalCalibDataFrame>* calibCont;
     std::vector<ZDCDataFrame>* zdcCont;
     std::vector<HcalTriggerPrimitiveDigi>* tpCont;
