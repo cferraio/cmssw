@@ -5,20 +5,20 @@
 
 static const int ICH_EM_MAX = 5;
 static const int ICH_HAD_MAX = 4;
-static const int ICH_LUM_MAX = 2;
+static const int ICH_RPD_MAX = 16;
 
 ZdcTopology::ZdcTopology() :
   excludeEM_(false),
   excludeHAD_(false),
-  excludeLUM_(false),
+  excludeRPD_(false),
   excludeZP_(false),
   excludeZN_(false),
   firstEMModule_(1),
   lastEMModule_(5),
   firstHADModule_(1),
   lastHADModule_(4), 
-  firstLUMModule_(1),
-  lastLUMModule_(2)
+  firstRPDModule_(1),
+  lastRPDModule_(16)
 {
 }
 
@@ -36,7 +36,7 @@ bool ZdcTopology::isExcluded(const HcalZDCDetId& id) const {
   switch (id.section()) {
   case(HcalZDCDetId::EM)  : exed = excludeEM_; break; 
   case(HcalZDCDetId::HAD) : exed = excludeHAD_; break; 
-  case(HcalZDCDetId::LUM) : exed = excludeLUM_; break;
+  case(HcalZDCDetId::RPD) : exed = excludeRPD_; break;
   default: exed = false;
   }
 
@@ -74,7 +74,7 @@ void ZdcTopology::exclude(int zside, HcalZDCDetId::Section section) {
   switch (section) {
   case(HcalZDCDetId::EM)  : excludeEM_ = true; break; 
   case(HcalZDCDetId::HAD) : excludeHAD_ = true; break; 
-  case(HcalZDCDetId::LUM) : excludeLUM_ = true; break;
+  case(HcalZDCDetId::RPD) : excludeRPD_ = true; break;
   default: break;
   }
 }
@@ -91,7 +91,7 @@ int ZdcTopology::exclude(int zside, HcalZDCDetId::Section section, int ich1, int
   switch (section) {
   case(HcalZDCDetId::EM)  : exed = excludeEM_; break; 
   case(HcalZDCDetId::HAD) : exed = excludeHAD_; break; 
-  case(HcalZDCDetId::LUM) : exed = excludeLUM_; break;
+  case(HcalZDCDetId::RPD) : exed = excludeRPD_; break;
   default: exed = false;
   }
   if (exed) return 0;
@@ -114,12 +114,12 @@ bool ZdcTopology::validRaw(const HcalZDCDetId& id) const{
   if(id.channel() <= 0)return false;
   if(!(id.section()== HcalZDCDetId::EM || 
        id.section()== HcalZDCDetId::HAD ||
-       id.section()== HcalZDCDetId::LUM)) return false;
+       id.section()== HcalZDCDetId::RPD)) return false;
   if(id.section()== HcalZDCDetId::EM && id.channel() > ICH_EM_MAX)
     return false;
   if(id.section()== HcalZDCDetId::HAD && id.channel() > ICH_HAD_MAX)
     return false;
-  if(id.section()== HcalZDCDetId::LUM && id.channel() > ICH_LUM_MAX)
+  if(id.section()== HcalZDCDetId::RPD && id.channel() > ICH_RPD_MAX)
     return false;
   return ok;
 }
@@ -171,7 +171,7 @@ std::vector<DetId> ZdcTopology::longitudinal(const DetId& id) const{
     zdcDetId = HcalZDCDetId(zdcId.section(), isPositive, zdcId.channel()+1);
     vNeighborsDetId.push_back(zdcDetId.rawId());
   }
-  if(validRaw(zdcId) && zdcId.section()== HcalZDCDetId::LUM){
+  if(validRaw(zdcId) && zdcId.section()== HcalZDCDetId::RPD){
     bool isPositive = false;
     if(zdcId.zside()==1)isPositive = true;
     if(zdcId.channel()==1){
@@ -179,7 +179,7 @@ std::vector<DetId> ZdcTopology::longitudinal(const DetId& id) const{
       vNeighborsDetId.push_back(zdcDetId.rawId());
       return vNeighborsDetId;
     }
-    if(zdcId.channel()== ICH_LUM_MAX){
+    if(zdcId.channel()== ICH_RPD_MAX){
       zdcDetId = HcalZDCDetId(zdcId.section(), isPositive, zdcId.channel()-1);
       vNeighborsDetId.push_back(zdcDetId.rawId());
       return vNeighborsDetId;
@@ -232,7 +232,7 @@ int ZdcTopology::ncells(HcalZDCDetId::Section section) const{
   switch (section) {
   case(HcalZDCDetId::EM)  : ncells = ICH_EM_MAX; break;
   case(HcalZDCDetId::HAD) : ncells = ICH_HAD_MAX; break; 
-  case(HcalZDCDetId::LUM) : ncells = ICH_LUM_MAX; break;
+  case(HcalZDCDetId::RPD) : ncells = ICH_RPD_MAX; break;
   case(HcalZDCDetId::Unknown) : ncells =0; break;
   }
   return ncells;
@@ -243,7 +243,7 @@ int ZdcTopology::firstCell(HcalZDCDetId::Section section)const {
   switch (section) {
   case(HcalZDCDetId::EM) : firstCell = firstEMModule_ ; break;
   case(HcalZDCDetId::HAD) : firstCell = firstHADModule_; break; 
-  case(HcalZDCDetId::LUM) : firstCell = firstLUMModule_; break;
+  case(HcalZDCDetId::RPD) : firstCell = firstRPDModule_; break;
   case(HcalZDCDetId::Unknown) : firstCell  = 0; break;
   }
   return firstCell;
@@ -254,7 +254,7 @@ int ZdcTopology::lastCell(HcalZDCDetId::Section section) const {
   switch (section) {
   case(HcalZDCDetId::EM) : lastCell = lastEMModule_; break;
   case(HcalZDCDetId::HAD) : lastCell = lastHADModule_; break; 
-  case(HcalZDCDetId::LUM) : lastCell = lastLUMModule_; break;
+  case(HcalZDCDetId::RPD) : lastCell = lastRPDModule_; break;
   case(HcalZDCDetId::Unknown) : lastCell  = 0; break;
   }
   return lastCell;

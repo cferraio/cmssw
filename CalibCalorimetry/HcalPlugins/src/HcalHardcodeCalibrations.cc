@@ -77,8 +77,8 @@ namespace {
 	zcell = HcalZDCDetId(section, false, depth);
 	if(zdctopology.valid(zcell)) result.push_back(zcell);     
       }
-      section = HcalZDCDetId::LUM;
-      for(int depth= 1; depth < 3; depth++){
+      section = HcalZDCDetId::RPD;
+      for(int depth= 1; depth < 17; depth++){
 	zcell = HcalZDCDetId(section, true, depth);
 	if(zdctopology.valid(zcell)) result.push_back(zcell);
 	zcell = HcalZDCDetId(section, false, depth);

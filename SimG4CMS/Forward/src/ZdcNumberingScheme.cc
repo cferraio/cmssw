@@ -65,8 +65,8 @@ unsigned int ZdcNumberingScheme::getUnitID(const G4Step* aStep) const {
         else
           channel = 5;	
       } 
-      else if (name[ich] == "ZDC_LumLayer") {
-        section = HcalZDCDetId::LUM;
+      else if (name[ich] == "ZDC_RPDLayer") {
+        section = HcalZDCDetId::RPD;
         layer = copyno[ich];
         channel = layer;
       }
@@ -83,7 +83,7 @@ unsigned int ZdcNumberingScheme::getUnitID(const G4Step* aStep) const {
           channel = 4;
       }
 #ifdef debug
-      else if (name[ich] == "ZDC_LumGas") {
+      else if (name[ich] == "ZDC_RPDGas") {
         fiber = 1;
       }
       else if (name[ich] == "ZDC_HadFiber") {

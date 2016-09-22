@@ -37,9 +37,9 @@ private:
   float theEMSectiondX;
   float theEMSectiondY;
   float theEMSectiondZ;
-  float theLUMSectiondX;
-  float theLUMSectiondY;
-  float theLUMSectiondZ;
+  float theRPDSectiondX;
+  float theRPDSectiondY;
+  float theRPDSectiondZ;
   float theHADSectiondX;
   float theHADSectiondY;
   float theHADSectiondZ;

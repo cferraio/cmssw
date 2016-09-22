@@ -65,8 +65,8 @@ protected:
   int FillHitValHist (int side,int section,int channel,double energy,double time);
 
 private:
-  double enetotEmN, enetotHadN,enetotN;  
-  double enetotEmP,enetotHadP,enetotP;
+  double enetotEmN, enetotHadN, enetotRPDN, enetotN;  
+  double enetotEmP,enetotHadP,enetotRPDP,enetotP;
   double enetot;
 
   /////////////////////////////////////////
@@ -84,15 +84,19 @@ private:
 
   MonitorElement *meAllZdcNHit_, *meBadZdcDetHit_, *meBadZdcSecHit_, *meBadZdcIdHit_;
   MonitorElement *meZdcNHit_,*meZdcDetectHit_,*meZdcSideHit_,*meZdcETime_;
-  MonitorElement *meZdcNHitEM_,*meZdcNHitHad_,*meZdcNHitLum_,*meZdc10Ene_;
+  MonitorElement *meZdcNHitEM_,*meZdcNHitHad_,*meZdcNHitRPD_,*meZdc10Ene_;
   MonitorElement *meZdcSectionHit_,*meZdcChannelHit_,*meZdcEnergyHit_,*meZdcTimeWHit_;
-  MonitorElement *meZdcHadEnergyHit_, *meZdcEMEnergyHit_, *meZdcTimeHit_, *meZdcHadL10EneP_;
-  MonitorElement *meZdc10EneP_, *meZdcEHadCh_, *meZdcEEMCh_,*meZdcEML10EneP_;
+  MonitorElement *meZdcHadEnergyHit_, *meZdcRPDEnergyHit_, *meZdcEMEnergyHit_, *meZdcTimeHit_, *meZdcHadL10EneP_, *meZdcRPDL10EneP_;
+  MonitorElement *meZdc10EneP_, *meZdcEHadCh_, *meZdcERPDCh_, *meZdcEEMCh_,*meZdcEML10EneP_;
   MonitorElement *meZdcEneEmN1_,*meZdcEneEmN2_,*meZdcEneEmN3_,*meZdcEneEmN4_,*meZdcEneEmN5_; 
   MonitorElement *meZdcEneHadN1_,*meZdcEneHadN2_,*meZdcEneHadN3_,*meZdcEneHadN4_;
+  MonitorElement *meZdcEneRPDN1_, *meZdcEneRPDN2_, *meZdcEneRPDN3_, *meZdcEneRPDN4_, *meZdcEneRPDN5_, *meZdcEneRPDN6_, *meZdcEneRPDN7_, *meZdcEneRPDN8_, *meZdcEneRPDN9_, *meZdcEneRPDN10_, *meZdcEneRPDN11_, *meZdcEneRPDN12_, *meZdcEneRPDN13_, *meZdcEneRPDN14_, *meZdcEneRPDN15_, *meZdcEneRPDN16_;
+  MonitorElement *meZdcEneRPDP1_, *meZdcEneRPDP2_, *meZdcEneRPDP3_, *meZdcEneRPDP4_, *meZdcEneRPDP5_, *meZdcEneRPDP6_, *meZdcEneRPDP7_, *meZdcEneRPDP8_, *meZdcEneRPDP9_, *meZdcEneRPDP10_, *meZdcEneRPDP11_, *meZdcEneRPDP12_, *meZdcEneRPDP13_, *meZdcEneRPDP14_, *meZdcEneRPDP15_, *meZdcEneRPDP16_;
+  MonitorElement *meZdcEneTRPDP1_, *meZdcEneTRPDP2_, *meZdcEneTRPDP3_, *meZdcEneTRPDP4_, *meZdcEneTRPDP5_, *meZdcEneTRPDP6_, *meZdcEneTRPDP7_, *meZdcEneTRPDP8_, *meZdcEneTRPDP9_, *meZdcEneTRPDP10_, *meZdcEneTRPDP11_, *meZdcEneTRPDP12_, *meZdcEneTRPDP13_, *meZdcEneTRPDP14_, *meZdcEneTRPDP15_, *meZdcEneTRPDP16_;
+   MonitorElement *meZdcEneTRPDN1_, *meZdcEneTRPDN2_, *meZdcEneTRPDN3_, *meZdcEneTRPDN4_, *meZdcEneTRPDN5_, *meZdcEneTRPDN6_, *meZdcEneTRPDN7_, *meZdcEneTRPDN8_, *meZdcEneTRPDN9_, *meZdcEneTRPDN10_, *meZdcEneTRPDN11_, *meZdcEneTRPDN12_, *meZdcEneTRPDN13_, *meZdcEneTRPDN14_, *meZdcEneTRPDN15_, *meZdcEneTRPDN16_;
   MonitorElement *meZdcEneTEmN1_,*meZdcEneTEmN2_,*meZdcEneTEmN3_,*meZdcEneTEmN4_,*meZdcEneTEmN5_; 
   MonitorElement *meZdcEneTHadN1_,*meZdcEneTHadN2_,*meZdcEneTHadN3_,*meZdcEneTHadN4_;
-  MonitorElement *meZdcEneHadNTot_,*meZdcEneEmNTot_,*meZdcEneNTot_;
+  MonitorElement *meZdcEneHadNTot_,*meZdcEneRPDNTot_,*meZdcEneRPDPTot_,*meZdcEneEmNTot_,*meZdcEneNTot_;
   MonitorElement *meZdcCorEEmNEHadN_;
   MonitorElement *meZdcEneEmP1_,*meZdcEneEmP2_,*meZdcEneEmP3_,*meZdcEneEmP4_,*meZdcEneEmP5_; 
   MonitorElement *meZdcEneHadP1_,*meZdcEneHadP2_,*meZdcEneHadP3_,*meZdcEneHadP4_;

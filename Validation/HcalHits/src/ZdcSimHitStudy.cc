@@ -88,9 +88,9 @@ void ZdcSimHitStudy::bookHistograms(DQMStore::IBooker &ib, edm::Run const &run, 
     meZdcNHitHad_->setAxisTitle("HAD Hits",1);
     meZdcNHitHad_->setAxisTitle("Counts",2);
     /////////////////////////7///////////////////////////
-    meZdcNHitLum_   = ib.book1D("Hits in LUM","Number of Hits in ZDC Lum",100,0.,100.);
-    meZdcNHitLum_->setAxisTitle("LUM Hits",1);
-    meZdcNHitLum_->setAxisTitle("Counts",2);
+    meZdcNHitRPD_   = ib.book1D("Hits in RPD","Number of Hits in ZDC RPD",100,0.,100.);
+    meZdcNHitRPD_->setAxisTitle("RPD Hits",1);
+    meZdcNHitRPD_->setAxisTitle("Counts",2);
     /////////////////////////8///////////////////////////
     meZdcDetectHit_= ib.book1D("Calo Detector ID","Calo Detector ID",50,0.,50.);
     meZdcDetectHit_->setAxisTitle("Detector Hits",1);
@@ -121,6 +121,10 @@ void ZdcSimHitStudy::bookHistograms(DQMStore::IBooker &ib, edm::Run const &run, 
     meZdcEMEnergyHit_->setAxisTitle("Counts",2);
     meZdcEMEnergyHit_->setAxisTitle("Energy (GeV)",1);
     /////////////////////////15///////////////////////////
+    meZdcRPDEnergyHit_ = ib.book1D("Hit Energy RPD","Hits Energy in RPD Section",4000,0.,8000.);
+    meZdcRPDEnergyHit_->setAxisTitle("Counts",2);
+    meZdcRPDEnergyHit_->setAxisTitle("Energy (GeV)",1);
+    /////////////////////////15///////////////////////////    
     ib.setCurrentFolder("ZDCValidation/ZdcSimHits/Excess_Info/BasicHitInfo");
     meZdcTimeHit_  = ib.book1D("Time in ZDC","Time in ZDC",300,0.,600.);
     meZdcTimeHit_->setAxisTitle("Time (ns)",1);
@@ -138,6 +142,10 @@ void ZdcSimHitStudy::bookHistograms(DQMStore::IBooker &ib, edm::Run const &run, 
     meZdcHadL10EneP_->setAxisTitle("Log(EHAD) (GeV)",1);
     meZdcHadL10EneP_->setAxisTitle("Counts",2);
     /////////////////////////19///////////////////////////
+    meZdcRPDL10EneP_ = ib.bookProfile("Log(ERPD) vs Contribution","Log10Energy in RPD ZDC vs Hit contribution", 140, -1., 20., 100, 0., 1. );
+    meZdcRPDL10EneP_->setAxisTitle("Log(ERPD) (GeV)",1);
+    meZdcRPDL10EneP_->setAxisTitle("Counts",2);
+    /////////////////////////19///////////////////////////
     meZdcEML10EneP_ = ib.bookProfile("Log(EEM) vs Contribution","Log10Energy in EM ZDC vs Hit contribution", 140, -1., 20., 100, 0., 1. );
     meZdcEML10EneP_->setAxisTitle("Log(EEM) (GeV)",1);
     meZdcEML10EneP_->setAxisTitle("Counts",2);
@@ -146,6 +154,11 @@ void ZdcSimHitStudy::bookHistograms(DQMStore::IBooker &ib, edm::Run const &run, 
     meZdcEHadCh_ = ib.book2D("ZDC EHAD vs Channel","ZDC Had Section Energy vs Channel", 4000, 0., 8000., 6, 0., 6. );
     meZdcEHadCh_->setAxisTitle("Hadronic Channel Number",2);
     meZdcEHadCh_->setAxisTitle("Energy (GeV)",1);
+    /////////////////////////21///////////////////////////
+    ib.setCurrentFolder("ZDCValidation/ZdcSimHits");
+    meZdcERPDCh_ = ib.book2D("ZDC ERPD vs Channel","ZDC RPD Section Energy vs Channel", 4000, 0., 8000., 6, 0., 6. );
+    meZdcERPDCh_->setAxisTitle("RPDronic Channel Number",2);
+    meZdcERPDCh_->setAxisTitle("Energy (GeV)",1);
     /////////////////////////21///////////////////////////
     meZdcEEMCh_ = ib.book2D("ZDC EEM vs Channel","ZDC EM Section Energy vs Channel", 4000, 0., 8000., 6, 0., 6. );
     meZdcEEMCh_->setAxisTitle("EM Channel Number",2);
@@ -192,6 +205,71 @@ void ZdcSimHitStudy::bookHistograms(DQMStore::IBooker &ib, edm::Run const &run, 
     meZdcEneHadN4_ = ib.book1D("NZDC HAD4 Energy","Energy HAD module N4",4000,0.,8000.);
     meZdcEneHadN4_->setAxisTitle("Energy (GeV)",1);
     meZdcEneHadN4_->setAxisTitle("Counts",2);
+        /////////////////////////28///////////////////////////
+    meZdcEneRPDN1_ = ib.book1D("NZDC RPD1 Energy","Energy RPD module N1",4000,0.,8000.);
+    meZdcEneRPDN1_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneRPDN1_->setAxisTitle("Counts",2);
+    /////////////////////////28///////////////////////////
+    meZdcEneRPDN2_ = ib.book1D("NZDC RPD2 Energy","Energy RPD module N2",4000,0.,8000.);
+    meZdcEneRPDN2_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneRPDN2_->setAxisTitle("Counts",2);
+    /////////////////////////28///////////////////////////
+    meZdcEneRPDN3_ = ib.book1D("NZDC RPD3 Energy","Energy RPD module N3",4000,0.,8000.);
+    meZdcEneRPDN3_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneRPDN3_->setAxisTitle("Counts",2);
+    /////////////////////////28///////////////////////////
+    meZdcEneRPDN4_ = ib.book1D("NZDC RPD4 Energy","Energy RPD module N4",4000,0.,8000.);
+    meZdcEneRPDN4_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneRPDN4_->setAxisTitle("Counts",2);
+    /////////////////////////28///////////////////////////
+    meZdcEneRPDN5_ = ib.book1D("NZDC RPD5 Energy","Energy RPD module N5",4000,0.,8000.);
+    meZdcEneRPDN5_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneRPDN5_->setAxisTitle("Counts",2);
+    /////////////////////////28///////////////////////////
+    meZdcEneRPDN6_ = ib.book1D("NZDC RPD6 Energy","Energy RPD module N6",4000,0.,8000.);
+    meZdcEneRPDN6_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneRPDN6_->setAxisTitle("Counts",2);
+    /////////////////////////28///////////////////////////
+    meZdcEneRPDN7_ = ib.book1D("NZDC RPD7 Energy","Energy RPD module N7",4000,0.,8000.);
+    meZdcEneRPDN7_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneRPDN7_->setAxisTitle("Counts",2);
+    /////////////////////////28///////////////////////////
+    meZdcEneRPDN8_ = ib.book1D("NZDC RPD8 Energy","Energy RPD module N8",4000,0.,8000.);
+    meZdcEneRPDN8_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneRPDN8_->setAxisTitle("Counts",2);
+    /////////////////////////28///////////////////////////
+    meZdcEneRPDN9_ = ib.book1D("NZDC RPD9 Energy","Energy RPD module N9",4000,0.,8000.);
+    meZdcEneRPDN9_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneRPDN9_->setAxisTitle("Counts",2);
+    /////////////////////////28///////////////////////////
+    meZdcEneRPDN10_ = ib.book1D("NZDC RPD10 Energy","Energy RPD module N10",4000,0.,8000.);
+    meZdcEneRPDN10_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneRPDN10_->setAxisTitle("Counts",2);
+    /////////////////////////28///////////////////////////
+    meZdcEneRPDN11_ = ib.book1D("NZDC RPD11 Energy","Energy RPD module N11",4000,0.,8000.);
+    meZdcEneRPDN11_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneRPDN11_->setAxisTitle("Counts",2);
+    /////////////////////////28///////////////////////////
+    meZdcEneRPDN12_ = ib.book1D("NZDC RPD12 Energy","Energy RPD module N12",4000,0.,8000.);
+    meZdcEneRPDN12_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneRPDN12_->setAxisTitle("Counts",2);
+    /////////////////////////28///////////////////////////
+    meZdcEneRPDN13_ = ib.book1D("NZDC RPD13 Energy","Energy RPD module N13",4000,0.,8000.);
+    meZdcEneRPDN13_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneRPDN13_->setAxisTitle("Counts",2);
+    /////////////////////////28///////////////////////////
+    meZdcEneRPDN14_ = ib.book1D("NZDC RPD14 Energy","Energy RPD module N14",4000,0.,8000.);
+    meZdcEneRPDN14_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneRPDN14_->setAxisTitle("Counts",2);
+    /////////////////////////28///////////////////////////
+    meZdcEneRPDN15_ = ib.book1D("NZDC RPD15 Energy","Energy RPD module N15",4000,0.,8000.);
+    meZdcEneRPDN15_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneRPDN15_->setAxisTitle("Counts",2);
+    /////////////////////////28///////////////////////////
+    meZdcEneRPDN16_ = ib.book1D("NZDC RPD16 Energy","Energy RPD module N16",4000,0.,8000.);
+    meZdcEneRPDN16_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneRPDN16_->setAxisTitle("Counts",2);
+
     /////////////////////////32///////////////////////////
     ib.setCurrentFolder("ZDCValidation/ZdcSimHits/Excess_Info/Individual_ChannelvsTime/NZDC");
     meZdcEneTEmN1_ = ib.book2D("NZDC EM1 Energy vs Time","Energy EM mod N1 vs Time", 4000, 0., 8000., 300, 0., 600. );
@@ -229,11 +307,80 @@ void ZdcSimHitStudy::bookHistograms(DQMStore::IBooker &ib, edm::Run const &run, 
     meZdcEneTHadN4_ = ib.book2D("NZDC HAD4 Energy vs Time","Energy HAD mod N4 vs Time", 4000, 0., 8000., 300, 0., 600. );
     meZdcEneTHadN4_->setAxisTitle("Energy (GeV)",1);
     meZdcEneTHadN4_->setAxisTitle("Time (ns)",2);
+    /////////////////////////37///////////////////////////
+    meZdcEneTRPDN1_ = ib.book2D("NZDC RPD1 Energy vs Time","Energy RPD mod N1 vs Time", 4000, 0., 8000., 300, 0., 600. );
+    meZdcEneTRPDN1_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneTRPDN1_->setAxisTitle("Time (ns)",2);
+/////////////////////////37///////////////////////////
+    meZdcEneTRPDN2_ = ib.book2D("NZDC RPD2 Energy vs Time","Energy RPD mod N2 vs Time", 4000, 0., 8000., 300, 0., 600. );
+    meZdcEneTRPDN2_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneTRPDN2_->setAxisTitle("Time (ns)",2);
+/////////////////////////37///////////////////////////
+    meZdcEneTRPDN3_ = ib.book2D("NZDC RPD3 Energy vs Time","Energy RPD mod N3 vs Time", 4000, 0., 8000., 300, 0., 600. );
+    meZdcEneTRPDN3_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneTRPDN3_->setAxisTitle("Time (ns)",2);
+/////////////////////////37///////////////////////////
+    meZdcEneTRPDN4_ = ib.book2D("NZDC RPD4 Energy vs Time","Energy RPD mod N4 vs Time", 4000, 0., 8000., 300, 0., 600. );
+    meZdcEneTRPDN4_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneTRPDN4_->setAxisTitle("Time (ns)",2);
+/////////////////////////37///////////////////////////
+    meZdcEneTRPDN5_ = ib.book2D("NZDC RPD5 Energy vs Time","Energy RPD mod N5 vs Time", 4000, 0., 8000., 300, 0., 600. );
+    meZdcEneTRPDN5_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneTRPDN5_->setAxisTitle("Time (ns)",2);
+/////////////////////////37///////////////////////////
+    meZdcEneTRPDN6_ = ib.book2D("NZDC RPD6 Energy vs Time","Energy RPD mod N6 vs Time", 4000, 0., 8000., 300, 0., 600. );
+    meZdcEneTRPDN6_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneTRPDN6_->setAxisTitle("Time (ns)",2);
+/////////////////////////37///////////////////////////
+    meZdcEneTRPDN7_ = ib.book2D("NZDC RPD7 Energy vs Time","Energy RPD mod N7 vs Time", 4000, 0., 8000., 300, 0., 600. );
+    meZdcEneTRPDN7_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneTRPDN7_->setAxisTitle("Time (ns)",2);
+/////////////////////////37///////////////////////////
+    meZdcEneTRPDN8_ = ib.book2D("NZDC RPD8 Energy vs Time","Energy RPD mod N8 vs Time", 4000, 0., 8000., 300, 0., 600. );
+    meZdcEneTRPDN8_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneTRPDN8_->setAxisTitle("Time (ns)",2);
+/////////////////////////37///////////////////////////
+    meZdcEneTRPDN9_ = ib.book2D("NZDC RPD9 Energy vs Time","Energy RPD mod N9 vs Time", 4000, 0., 8000., 300, 0., 600. );
+    meZdcEneTRPDN9_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneTRPDN9_->setAxisTitle("Time (ns)",2);
+/////////////////////////37///////////////////////////
+    meZdcEneTRPDN10_ = ib.book2D("NZDC RPD10 Energy vs Time","Energy RPD mod N10 vs Time", 4000, 0., 8000., 300, 0., 600. );
+    meZdcEneTRPDN10_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneTRPDN10_->setAxisTitle("Time (ns)",2);
+/////////////////////////37///////////////////////////
+    meZdcEneTRPDN11_ = ib.book2D("NZDC RPD11 Energy vs Time","Energy RPD mod N11 vs Time", 4000, 0., 8000., 300, 0., 600. );
+    meZdcEneTRPDN11_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneTRPDN11_->setAxisTitle("Time (ns)",2);
+/////////////////////////37///////////////////////////
+    meZdcEneTRPDN12_ = ib.book2D("NZDC RPD12 Energy vs Time","Energy RPD mod N12 vs Time", 4000, 0., 8000., 300, 0., 600. );
+    meZdcEneTRPDN12_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneTRPDN12_->setAxisTitle("Time (ns)",2);
+/////////////////////////37///////////////////////////
+    meZdcEneTRPDN13_ = ib.book2D("NZDC RPD13 Energy vs Time","Energy RPD mod N13 vs Time", 4000, 0., 8000., 300, 0., 600. );
+    meZdcEneTRPDN13_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneTRPDN13_->setAxisTitle("Time (ns)",2);
+/////////////////////////37///////////////////////////
+    meZdcEneTRPDN14_ = ib.book2D("NZDC RPD14 Energy vs Time","Energy RPD mod N14 vs Time", 4000, 0., 8000., 300, 0., 600. );
+    meZdcEneTRPDN14_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneTRPDN14_->setAxisTitle("Time (ns)",2);
+/////////////////////////37///////////////////////////
+    meZdcEneTRPDN15_ = ib.book2D("NZDC RPD15 Energy vs Time","Energy RPD mod N15 vs Time", 4000, 0., 8000., 300, 0., 600. );
+    meZdcEneTRPDN15_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneTRPDN15_->setAxisTitle("Time (ns)",2);
+/////////////////////////37///////////////////////////
+    meZdcEneTRPDN16_ = ib.book2D("NZDC RPD16 Energy vs Time","Energy RPD mod N16 vs Time", 4000, 0., 8000., 300, 0., 600. );
+    meZdcEneTRPDN16_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneTRPDN16_->setAxisTitle("Time (ns)",2);
     /////////////////////////41///////////////////////////
     ib.setCurrentFolder("ZDCValidation/ZdcSimHits/ENERGY_SUMS/NZDC");
     meZdcEneHadNTot_ = ib.book1D("NZDC EHAD","Total N-ZDC HAD Energy",4000,0.,4000.);
     meZdcEneHadNTot_->setAxisTitle("Counts",2);
     meZdcEneHadNTot_->setAxisTitle("Energy (GeV)",1);
+    /////////////////////////41///////////////////////////
+    ib.setCurrentFolder("ZDCValidation/ZdcSimHits/ENERGY_SUMS/NZDC");
+    meZdcEneRPDNTot_ = ib.book1D("NZDC ERPD","Total N-ZDC RPD Energy",4000,0.,4000.);
+    meZdcEneRPDNTot_->setAxisTitle("Counts",2);
+    meZdcEneRPDNTot_->setAxisTitle("Energy (GeV)",1);
     /////////////////////////42///////////////////////////
     meZdcEneEmNTot_ = ib.book1D("NZDC EEM","Total N-ZDC EM Energy",3000,0.,3000.);
     meZdcEneEmNTot_->setAxisTitle("Counts",2);
@@ -279,6 +426,70 @@ void ZdcSimHitStudy::bookHistograms(DQMStore::IBooker &ib, edm::Run const &run, 
     meZdcEneHadP4_ = ib.book1D("PZDC HAD4 Energy","Energy HAD module P4",3000,0.,3000.);
     meZdcEneHadP4_->setAxisTitle("Energy (GeV)",1);
     meZdcEneHadP4_->setAxisTitle("Counts",2);
+        /////////////////////////28///////////////////////////
+    meZdcEneRPDP1_ = ib.book1D("PZDC RPD1 Energy","Energy RPD module P1",4000,0.,8000.);
+    meZdcEneRPDP1_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneRPDP1_->setAxisTitle("Counts",2);
+    /////////////////////////28///////////////////////////
+    meZdcEneRPDP2_ = ib.book1D("PZDC RPD2 Energy","Energy RPD module P2",4000,0.,8000.);
+    meZdcEneRPDP2_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneRPDP2_->setAxisTitle("Counts",2);
+    /////////////////////////28///////////////////////////
+    meZdcEneRPDP3_ = ib.book1D("PZDC RPD3 Energy","Energy RPD module P3",4000,0.,8000.);
+    meZdcEneRPDP3_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneRPDP3_->setAxisTitle("Counts",2);
+    /////////////////////////28///////////////////////////
+    meZdcEneRPDP4_ = ib.book1D("PZDC RPD4 Energy","Energy RPD module P4",4000,0.,8000.);
+    meZdcEneRPDP4_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneRPDP4_->setAxisTitle("Counts",2);
+    /////////////////////////28///////////////////////////
+    meZdcEneRPDP5_ = ib.book1D("PZDC RPD5 Energy","Energy RPD module P5",4000,0.,8000.);
+    meZdcEneRPDP5_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneRPDP5_->setAxisTitle("Counts",2);
+    /////////////////////////28///////////////////////////
+    meZdcEneRPDP6_ = ib.book1D("PZDC RPD6 Energy","Energy RPD module P6",4000,0.,8000.);
+    meZdcEneRPDP6_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneRPDP6_->setAxisTitle("Counts",2);
+    /////////////////////////28///////////////////////////
+    meZdcEneRPDP7_ = ib.book1D("PZDC RPD7 Energy","Energy RPD module P7",4000,0.,8000.);
+    meZdcEneRPDP7_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneRPDP7_->setAxisTitle("Counts",2);
+    /////////////////////////28///////////////////////////
+    meZdcEneRPDP8_ = ib.book1D("PZDC RPD8 Energy","Energy RPD module P8",4000,0.,8000.);
+    meZdcEneRPDP8_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneRPDP8_->setAxisTitle("Counts",2);
+    /////////////////////////28///////////////////////////
+    meZdcEneRPDP9_ = ib.book1D("PZDC RPD9 Energy","Energy RPD module P9",4000,0.,8000.);
+    meZdcEneRPDP9_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneRPDP9_->setAxisTitle("Counts",2);
+    /////////////////////////28///////////////////////////
+    meZdcEneRPDP10_ = ib.book1D("PZDC RPD10 Energy","Energy RPD module P10",4000,0.,8000.);
+    meZdcEneRPDP10_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneRPDP10_->setAxisTitle("Counts",2);
+    /////////////////////////28///////////////////////////
+    meZdcEneRPDP11_ = ib.book1D("PZDC RPD11 Energy","Energy RPD module P11",4000,0.,8000.);
+    meZdcEneRPDP11_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneRPDP11_->setAxisTitle("Counts",2);
+    /////////////////////////28///////////////////////////
+    meZdcEneRPDP12_ = ib.book1D("PZDC RPD12 Energy","Energy RPD module P12",4000,0.,8000.);
+    meZdcEneRPDP12_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneRPDP12_->setAxisTitle("Counts",2);
+    /////////////////////////28///////////////////////////
+    meZdcEneRPDP13_ = ib.book1D("PZDC RPD13 Energy","Energy RPD module P13",4000,0.,8000.);
+    meZdcEneRPDP13_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneRPDP13_->setAxisTitle("Counts",2);
+    /////////////////////////28///////////////////////////
+    meZdcEneRPDP14_ = ib.book1D("PZDC RPD14 Energy","Energy RPD module P14",4000,0.,8000.);
+    meZdcEneRPDP14_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneRPDP14_->setAxisTitle("Counts",2);
+    /////////////////////////28///////////////////////////
+    meZdcEneRPDP15_ = ib.book1D("PZDC RPD15 Energy","Energy RPD module P15",4000,0.,8000.);
+    meZdcEneRPDP15_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneRPDP15_->setAxisTitle("Counts",2);
+    /////////////////////////28///////////////////////////
+    meZdcEneRPDP16_ = ib.book1D("PZDC RPD16 Energy","Energy RPD module P16",4000,0.,8000.);
+    meZdcEneRPDP16_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneRPDP16_->setAxisTitle("Counts",2);
     /////////////////////////53///////////////////////////
     ib.setCurrentFolder("ZDCValidation/ZdcSimHits/Excess_Info/Individual_ChannelvsTime/PZDC");
     meZdcEneTEmP1_ = ib.book2D("PZDC EM1 Energy vs Time","Energy EM mod P1 vs Time", 4000, 0., 8000., 300, 0., 600. );
@@ -316,11 +527,80 @@ void ZdcSimHitStudy::bookHistograms(DQMStore::IBooker &ib, edm::Run const &run, 
     meZdcEneTHadP4_ = ib.book2D("PZDC HAD4 Energy vs Time","Energy HAD mod P4 vs Time", 4000, 0., 8000., 300, 0., 600. );
     meZdcEneTHadP4_->setAxisTitle("Energy (GeV)",1);
     meZdcEneTHadP4_->setAxisTitle("Time (ns)",2);
+        /////////////////////////37    ///////////////////////////
+    meZdcEneTRPDP1_ = ib.book2D("PZDC RPD1 Energy vs Time","Energy RPD mod P1 vs Time", 4000, 0., 8000., 300, 0., 600. );
+    meZdcEneTRPDP1_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneTRPDP1_->setAxisTitle("Time (ns)",2);
+    /////////////////////////37    ///////////////////////////
+    meZdcEneTRPDP2_ = ib.book2D("PZDC RPD2 Energy vs Time","Energy RPD mod P2 vs Time", 4000, 0., 8000., 300, 0., 600. );
+    meZdcEneTRPDP2_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneTRPDP2_->setAxisTitle("Time (ns)",2);
+    /////////////////////////37    ///////////////////////////
+    meZdcEneTRPDP3_ = ib.book2D("PZDC RPD3 Energy vs Time","Energy RPD mod P3 vs Time", 4000, 0., 8000., 300, 0., 600. );
+    meZdcEneTRPDP3_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneTRPDP3_->setAxisTitle("Time (ns)",2);
+    /////////////////////////37    ///////////////////////////
+    meZdcEneTRPDP4_ = ib.book2D("PZDC RPD4 Energy vs Time","Energy RPD mod P4 vs Time", 4000, 0., 8000., 300, 0., 600. );
+    meZdcEneTRPDP4_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneTRPDP4_->setAxisTitle("Time (ns)",2);
+    /////////////////////////37    ///////////////////////////
+    meZdcEneTRPDP5_ = ib.book2D("PZDC RPD5 Energy vs Time","Energy RPD mod P5 vs Time", 4000, 0., 8000., 300, 0., 600. );
+    meZdcEneTRPDP5_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneTRPDP5_->setAxisTitle("Time (ns)",2);
+    /////////////////////////37    ///////////////////////////
+    meZdcEneTRPDP6_ = ib.book2D("PZDC RPD6 Energy vs Time","Energy RPD mod P6 vs Time", 4000, 0., 8000., 300, 0., 600. );
+    meZdcEneTRPDP6_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneTRPDP6_->setAxisTitle("Time (ns)",2);
+    /////////////////////////37    ///////////////////////////
+    meZdcEneTRPDP7_ = ib.book2D("PZDC RPD7 Energy vs Time","Energy RPD mod P7 vs Time", 4000, 0., 8000., 300, 0., 600. );
+    meZdcEneTRPDP7_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneTRPDP7_->setAxisTitle("Time (ns)",2);
+    /////////////////////////37    ///////////////////////////
+    meZdcEneTRPDP8_ = ib.book2D("PZDC RPD8 Energy vs Time","Energy RPD mod P8 vs Time", 4000, 0., 8000., 300, 0., 600. );
+    meZdcEneTRPDP8_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneTRPDP8_->setAxisTitle("Time (ns)",2);
+    /////////////////////////37    ///////////////////////////
+    meZdcEneTRPDP9_ = ib.book2D("PZDC RPD9 Energy vs Time","Energy RPD mod P9 vs Time", 4000, 0., 8000., 300, 0., 600. );
+    meZdcEneTRPDP9_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneTRPDP9_->setAxisTitle("Time (ns)",2);
+    /////////////////////////37    ///////////////////////////
+    meZdcEneTRPDP10_ = ib.book2D("PZDC RPD10 Energy vs Time","Energy RPD mod P10 vs Time", 4000, 0., 8000., 300, 0., 600. );
+    meZdcEneTRPDP10_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneTRPDP10_->setAxisTitle("Time (ns)",2);
+    /////////////////////////37    ///////////////////////////
+    meZdcEneTRPDP11_ = ib.book2D("PZDC RPD11 Energy vs Time","Energy RPD mod P11 vs Time", 4000, 0., 8000., 300, 0., 600. );
+    meZdcEneTRPDP11_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneTRPDP11_->setAxisTitle("Time (ns)",2);
+    /////////////////////////37    ///////////////////////////
+    meZdcEneTRPDP12_ = ib.book2D("PZDC RPD12 Energy vs Time","Energy RPD mod P12 vs Time", 4000, 0., 8000., 300, 0., 600. );
+    meZdcEneTRPDP12_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneTRPDP12_->setAxisTitle("Time (ns)",2);
+    /////////////////////////37    ///////////////////////////
+    meZdcEneTRPDP13_ = ib.book2D("PZDC RPD13 Energy vs Time","Energy RPD mod P13 vs Time", 4000, 0., 8000., 300, 0., 600. );
+    meZdcEneTRPDP13_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneTRPDP13_->setAxisTitle("Time (ns)",2);
+    /////////////////////////37    ///////////////////////////
+    meZdcEneTRPDP14_ = ib.book2D("PZDC RPD14 Energy vs Time","Energy RPD mod P14 vs Time", 4000, 0., 8000., 300, 0., 600. );
+    meZdcEneTRPDP14_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneTRPDP14_->setAxisTitle("Time (ns)",2);
+    /////////////////////////37    ///////////////////////////
+    meZdcEneTRPDP15_ = ib.book2D("PZDC RPD15 Energy vs Time","Energy RPD mod P15 vs Time", 4000, 0., 8000., 300, 0., 600. );
+    meZdcEneTRPDP15_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneTRPDP15_->setAxisTitle("Time (ns)",2);
+    /////////////////////////37    ///////////////////////////
+    meZdcEneTRPDP16_ = ib.book2D("PZDC RPD16 Energy vs Time","Energy RPD mod P16 vs Time", 4000, 0., 8000., 300, 0., 600. );
+    meZdcEneTRPDP16_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneTRPDP16_->setAxisTitle("Time (ns)",2);
     /////////////////////////62/////////////////////////////
     ib.setCurrentFolder("ZDCValidation/ZdcSimHits/ENERGY_SUMS/PZDC");
     meZdcEneHadPTot_ = ib.book1D("PZDC EHAD","Total P-ZDC HAD Energy",10000,0.,10000.);
     meZdcEneHadPTot_->setAxisTitle("Energy (GeV)",1);
     meZdcEneHadPTot_->setAxisTitle("Counts",2);
+    /////////////////////////62/////////////////////////////
+    ib.setCurrentFolder("ZDCValidation/ZdcSimHits/ENERGY_SUMS/PZDC");
+    meZdcEneRPDPTot_ = ib.book1D("PZDC ERPD","Total P-ZDC RPD Energy",10000,0.,10000.);
+    meZdcEneRPDPTot_->setAxisTitle("Energy (GeV)",1);
+    meZdcEneRPDPTot_->setAxisTitle("Counts",2);
     /////////////////////////63///////////////////////////
     meZdcEneEmPTot_ = ib.book1D("PZDC EEM","Total P-ZDC EM Energy",10000,0.,10000.);
     meZdcEneEmPTot_->setAxisTitle("Energy (GeV)",1);
@@ -338,7 +618,7 @@ void ZdcSimHitStudy::bookHistograms(DQMStore::IBooker &ib, edm::Run const &run, 
     ib.setCurrentFolder("ZDCValidation/ZdcSimHits/ENERGY_SUMS/PZDC");
     meZdcCorEEmPEHadP_= ib.book2D("PZDC EMvHAD","P-ZDC Energy EM vs HAD", 3000, 0., 3000.,3000, 0., 3000.);
     meZdcCorEEmPEHadP_->setAxisTitle("EM Energy (GeV)",1);
-    meZdcCorEEmPEHadP_->setAxisTitle("HAD Energy (GeV)",2);
+    meZdcCorEEmPEHadP_->setAxisTitle("HAD Energy (GeV)",2);    
     /////////////////////////67///////////////////////////
     ib.setCurrentFolder("ZDCValidation/ZdcSimHits/ENERGY_SUMS");
     meZdcCorEtotNEtotP_ = ib.book2D("PZDC vs NZDC","Energy N-ZDC vs P-ZDC", 3000, 0., 3000.,3000, 0., 3000.);
@@ -647,18 +927,22 @@ void ZdcSimHitStudy::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
 
 void ZdcSimHitStudy::analyzeHits(std::vector<PCaloHit>& hits){
   int nHit = hits.size();
-  int nZdcEM = 0, nZdcHad = 0, nZdcLum = 0;
+  int nZdcEM = 0, nZdcHad = 0, nZdcRPD = 0;
   int nBad1=0, nBad2=0, nBad=0;
   std::vector<double> encontZdcEM(140, 0.);
   std::vector<double> encontZdcHad(140, 0.);
+  std::vector<double> encontZdcRPD(140, 0.);
   double entotZdcEM = 0;
   double entotZdcHad = 0;
+  double entotZdcRPD = 0;
 
   enetotEmN = 0;
   enetotHadN = 0.;
+  enetotRPDN = 0.;
   enetotN = 0;
   enetotEmP = 0;
   enetotHadP = 0;
+  enetotRPDP = 0;
   enetotP = 0;
   enetot = 0;
 
@@ -691,7 +975,7 @@ void ZdcSimHitStudy::analyzeHits(std::vector<PCaloHit>& hits){
     if(det == 5) { // Check DetId.h
       if(section == HcalZDCDetId::EM)nZdcEM++;
       else if(section == HcalZDCDetId::HAD)nZdcHad++;
-      else if(section == HcalZDCDetId::LUM)nZdcLum++;
+      else if(section == HcalZDCDetId::RPD)nZdcRPD++;
       else    { nBad++;  nBad2++;}
     } else    { nBad++;  nBad1++;}
 
@@ -713,6 +997,12 @@ void ZdcSimHitStudy::analyzeHits(std::vector<PCaloHit>& hits){
         if( log10i >=0 && log10i < 140 )encontZdcHad[log10i] += energy;
         entotZdcHad += energy;
       }
+      if(section == HcalZDCDetId::RPD){
+        meZdcRPDEnergyHit_->Fill(energy);
+        meZdcERPDCh_->Fill(energy,channel);
+        if( log10i >=0 && log10i < 140 )encontZdcRPD[log10i] += energy;
+        entotZdcRPD += energy;
+      }
       meZdcTimeHit_->Fill(time);
       meZdcTimeWHit_->Fill(double(time),energy);
       meZdc10Ene_->Fill(log10en);
@@ -722,6 +1012,7 @@ void ZdcSimHitStudy::analyzeHits(std::vector<PCaloHit>& hits){
 
   if( entotZdcEM  != 0 ) for( int i=0; i<140; i++ ) meZdcEML10EneP_->Fill( -10.+(float(i)+0.5)/10., encontZdcEM[i]/entotZdcEM);
   if( entotZdcHad != 0 ) for( int i=0; i<140; i++ ) meZdcHadL10EneP_->Fill( -10.+(float(i)+0.5)/10.,encontZdcHad[i]/entotZdcHad);
+  if( entotZdcRPD != 0 ) for( int i=0; i<140; i++ ) meZdcRPDL10EneP_->Fill( -10.+(float(i)+0.5)/10.,encontZdcRPD[i]/entotZdcRPD);
 
   if ( nHit>0) {
     meAllZdcNHit_->Fill(double(nHit));
@@ -730,11 +1021,14 @@ void ZdcSimHitStudy::analyzeHits(std::vector<PCaloHit>& hits){
     meBadZdcIdHit_->Fill(double(nBad));
     meZdcNHitEM_->Fill(double(nZdcEM));
     meZdcNHitHad_->Fill(double(nZdcHad));
-    meZdcNHitLum_->Fill(double(nZdcLum));
+    meZdcNHitRPD_->Fill(double(nZdcRPD));
+    meZdcNHitRPD_->Fill(double(nZdcRPD));
     meZdcEnePTot_->Fill(enetotP);
     meZdcEneNTot_->Fill(enetotN);
     meZdcEneHadNTot_->Fill(enetotHadN);
+    meZdcEneRPDNTot_->Fill(enetotRPDN);
     meZdcEneHadPTot_->Fill(enetotHadP);
+    meZdcEneRPDPTot_->Fill(enetotRPDP);
     meZdcEneEmNTot_->Fill(enetotEmN);
     meZdcEneEmPTot_->Fill(enetotEmP);
     meZdcCorEEmNEHadN_->Fill(enetotEmN,enetotHadN);
@@ -800,6 +1094,76 @@ int ZdcSimHitStudy::FillHitValHist(int side,int section,int channel,double energ
         break;
       }
     }
+    if(section == HcalZDCDetId::RPD){
+      enetotRPDN += energy;
+      switch(channel){
+      case 1 :
+        meZdcEneRPDN1_->Fill(energy);
+        meZdcEneTRPDN1_->Fill(energy,time);
+        break;
+      case 2 :
+        meZdcEneRPDN2_->Fill(energy);
+        meZdcEneTRPDN2_->Fill(energy,time);
+        break;
+      case 3 :
+        meZdcEneRPDN3_->Fill(energy);
+        meZdcEneTRPDN3_->Fill(energy,time);
+        break;
+      case 4 :
+        meZdcEneRPDN4_->Fill(energy);
+        meZdcEneTRPDN4_->Fill(energy,time);
+        break;
+	  case 5 :
+		  meZdcEneRPDN5_->Fill(energy);
+		  meZdcEneTRPDN5_->Fill(energy,time);
+		  break;
+	  case 6 :
+			  meZdcEneRPDN6_->Fill(energy);
+			  meZdcEneTRPDN6_->Fill(energy,time);
+			  break;
+	  case 7 :
+			  meZdcEneRPDN7_->Fill(energy);
+			  meZdcEneTRPDN7_->Fill(energy,time);
+			  break;
+	  case 8 :
+			  meZdcEneRPDN8_->Fill(energy);
+			  meZdcEneTRPDN8_->Fill(energy,time);
+			  break;
+	  case 9 :
+			  meZdcEneRPDN9_->Fill(energy);
+			  meZdcEneTRPDN9_->Fill(energy,time);
+			  break;
+	  case 10 :
+			  meZdcEneRPDN10_->Fill(energy);
+			  meZdcEneTRPDN10_->Fill(energy,time);
+			  break;
+	  case 11 :
+			  meZdcEneRPDN11_->Fill(energy);
+			  meZdcEneTRPDN11_->Fill(energy,time);
+			  break;
+	  case 12 :
+			  meZdcEneRPDN12_->Fill(energy);
+			  meZdcEneTRPDN12_->Fill(energy,time);
+			  break;
+	  case 13 :
+			  meZdcEneRPDN13_->Fill(energy);
+			  meZdcEneTRPDN13_->Fill(energy,time);
+			  break;
+	  case 14 :
+			  meZdcEneRPDN14_->Fill(energy);
+			  meZdcEneTRPDN14_->Fill(energy,time);
+			  break;
+	  case 15 :
+			  meZdcEneRPDN15_->Fill(energy);
+			  meZdcEneTRPDN15_->Fill(energy,time);
+			  break;
+	  case 16 :
+			  meZdcEneRPDN16_->Fill(energy);
+			  meZdcEneTRPDN16_->Fill(energy,time);
+			  break;
+
+      }
+    }
   }
   if(side == 1){
     enetotP += energy;
@@ -847,6 +1211,76 @@ int ZdcSimHitStudy::FillHitValHist(int side,int section,int channel,double energ
         meZdcEneHadP4_->Fill(energy);
         meZdcEneTHadP4_->Fill(energy,time);
         break;
+      }
+    }
+    if(section == HcalZDCDetId::RPD){
+      enetotRPDP += energy;
+      switch(channel){
+      case 1 :
+        meZdcEneRPDP1_->Fill(energy);
+        meZdcEneTRPDP1_->Fill(energy,time);
+        break;
+      case 2 :
+        meZdcEneRPDP2_->Fill(energy);
+        meZdcEneTRPDP2_->Fill(energy,time);
+        break;
+      case 3 :
+        meZdcEneRPDP3_->Fill(energy);
+        meZdcEneTRPDP3_->Fill(energy,time);
+        break;
+      case 4 :
+        meZdcEneRPDP4_->Fill(energy);
+        meZdcEneTRPDP4_->Fill(energy,time);
+        break;
+	  case 5 :
+		  meZdcEneRPDP5_->Fill(energy);
+		  meZdcEneTRPDP5_->Fill(energy,time);
+		  break;
+	  case 6 :
+			  meZdcEneRPDP6_->Fill(energy);
+			  meZdcEneTRPDP6_->Fill(energy,time);
+			  break;
+	  case 7 :
+			  meZdcEneRPDP7_->Fill(energy);
+			  meZdcEneTRPDP7_->Fill(energy,time);
+			  break;
+	  case 8 :
+			  meZdcEneRPDP8_->Fill(energy);
+			  meZdcEneTRPDP8_->Fill(energy,time);
+			  break;
+	  case 9 :
+			  meZdcEneRPDP9_->Fill(energy);
+			  meZdcEneTRPDP9_->Fill(energy,time);
+			  break;
+	  case 10 :
+			  meZdcEneRPDP10_->Fill(energy);
+			  meZdcEneTRPDP10_->Fill(energy,time);
+			  break;
+	  case 11 :
+			  meZdcEneRPDP11_->Fill(energy);
+			  meZdcEneTRPDP11_->Fill(energy,time);
+			  break;
+	  case 12 :
+			  meZdcEneRPDP12_->Fill(energy);
+			  meZdcEneTRPDP12_->Fill(energy,time);
+			  break;
+	  case 13 :
+			  meZdcEneRPDP13_->Fill(energy);
+			  meZdcEneTRPDP13_->Fill(energy,time);
+			  break;
+	  case 14 :
+			  meZdcEneRPDP14_->Fill(energy);
+			  meZdcEneTRPDP14_->Fill(energy,time);
+			  break;
+	  case 15 :
+			  meZdcEneRPDP15_->Fill(energy);
+			  meZdcEneTRPDP15_->Fill(energy,time);
+			  break;
+	  case 16 :
+			  meZdcEneRPDP16_->Fill(energy);
+			  meZdcEneTRPDP16_->Fill(energy,time);
+			  break;
+
       }
     }
   }
